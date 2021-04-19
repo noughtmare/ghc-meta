@@ -1,0 +1,38 @@
+cabal-version:      2.4
+name:               ghc-meta
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+license:            GPL-3.0-only
+author:             Jaro Reinders
+maintainer:         jaro.reinders@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+library
+    exposed-modules:  GHC.Meta
+
+    -- Modules included in this library but not exported.
+    -- other-modules:
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    base ^>=4.14.1.0
+                    , ghc == 8.10.4
+                    , template-haskell
+                    , bytestring
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    ghc-options: -Wall
