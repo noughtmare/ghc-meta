@@ -1,16 +1,25 @@
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TemplateHaskellQuotes #-}
+{-# LANGUAGE PackageImports #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-module GHC.Meta (GHC.Meta.parseType, parseExp, parsePat, metaType, metaExp, metaPat) where
+module GHC.Meta
+  ( GHC.Meta.parseType
+  , parseExp
+  , parsePat
+  , metaType
+  , metaExp
+  , metaPat
+  ) where
 
 import           Bag
 import           BasicTypes
 import           Data.ByteString.Char8          ( unpack )
 import qualified EnumSet
 import           FastString
-import           GHC
-import qualified Language.Haskell.TH.Syntax    as TH
+import           GHC.Hs
+import qualified "template-haskell" Language.Haskell.TH.Syntax
+                                               as TH
 import           Lexer
 import           Module
 import           Name
@@ -344,10 +353,9 @@ initPState x = mkPStatePure emptyParserFlags
                             (mkRealSrcLoc (fsLit "test") 0 0)
 
 parseXY :: P (Located x) -> (x -> y) -> String -> Maybe y
-parseXY p meta str =
-  case unP p (initPState str) of
-    POk _ (L _ x) -> Just (meta x)
-    PFailed _      -> Nothing
+parseXY p meta str = case unP p (initPState str) of
+  POk _ (L _ x) -> Just (meta x)
+  PFailed _     -> Nothing
 
 parseExp :: String -> Maybe TH.Exp
 parseExp = parseXY (runECP_P @(HsExpr _) =<< parseExpression) metaExp
