@@ -147,16 +147,16 @@ metaPat = \case
         )
     (InfixCon (L _ p1) (L _ p2)) ->
       TH.InfixP (metaPat p1) (metaName n) (metaPat p2)
-  ConPatOut {} -> error "GHC.Meta.metaPat: Can't handle ConPatOut yet"
+  ConPatOut {} -> error "GHC.Meta.metaPat: Cannot handle ConPatOut yet"
   (ViewPat _ (L _ x) (L _ p)) -> TH.ViewP (metaExp x) (metaPat p)
-  (SplicePat _ _) -> error "GHC.Meta.metaPat: Can't handle SplitPat yet"
+  (SplicePat _ _) -> error "GHC.Meta.metaPat: Cannot handle SplitPat yet"
   (LitPat _ lit) -> TH.LitP (metaLit lit)
   (NPat _ (L _ (OverLit _ v _)) _ _) -> case v of
     HsIntegral i -> TH.LitP (TH.IntegerL (il_value i))
     HsFractional f -> TH.LitP (TH.RationalL (fl_value f))
-    HsIsString {} -> error "GHC.Meta.metaPat: Can't handle String literal yet"
+    HsIsString {} -> error "GHC.Meta.metaPat: Cannot handle String literal yet"
   NPat _ (L _ (XOverLit void)) _ _ -> case void of
-  NPlusKPat {} -> error "GHC.Meta.metaPat: Can't handle N plus K pattern yet"
+  NPlusKPat {} -> error "GHC.Meta.metaPat: Cannot handle N plus K pattern yet"
   (SigPat _ (L _ p) (HsWC _ (HsIB _ (L _ t)))) ->
     TH.SigP (metaPat p) (metaType t)
   SigPat {} -> error "GHC.Meta.metaPat: Unexpected SigPat"
@@ -461,7 +461,7 @@ metaExp = \case
   HsSCC {} -> error "GHC.Meta.metaExp: Cost centres not (yet) handled by Template Haskell"
   -- I am not very certain about the proper semantics of core annotations,
   -- perhaps they are impossible at this stage.
-  HsCoreAnn _ _ _ (L _ x) -> metaExp x -- error "GHC.Meta.metaExp: Cannot handle HsCoreAnn yet"
+  HsCoreAnn _ _ _ (L _ x) -> metaExp x
   HsBracket {} -> error
     "GHC.Meta.metaExp: Template Haskell does not support nested brackets, \
     \see possibly: https://gitlab.haskell.org/ghc/ghc/-/merge_requests/259"
